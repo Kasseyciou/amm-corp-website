@@ -10,6 +10,60 @@ const updateHeader = () => {
 updateHeader();
 window.addEventListener("scroll", updateHeader, { passive: true });
 
+document.querySelectorAll(".anchor-nav").forEach((anchorNav) => {
+  const items = [...anchorNav.querySelectorAll('a[href^="#"]')]
+    .map((link) => {
+      const target = document.querySelector(link.getAttribute("href"));
+      return target ? { link, target } : null;
+    })
+    .filter(Boolean);
+
+  if (!items.length) return;
+
+  const setActiveLink = (activeLink) => {
+    items.forEach(({ link }) => {
+      const isActive = link === activeLink;
+      link.classList.toggle("is-active", isActive);
+      if (isActive) {
+        link.setAttribute("aria-current", "location");
+      } else {
+        link.removeAttribute("aria-current");
+      }
+    });
+  };
+
+  const updateActiveLink = () => {
+    const headerHeight = header?.offsetHeight ?? 0;
+    const sectionMarker = window.scrollY + headerHeight + anchorNav.offsetHeight + 32;
+    let activeItem = items[0];
+    let activeTop = -Infinity;
+
+    items.forEach((item) => {
+      const targetTop = item.target.getBoundingClientRect().top + window.scrollY;
+      if (targetTop <= sectionMarker && targetTop > activeTop) {
+        activeItem = item;
+        activeTop = targetTop;
+      }
+    });
+
+    setActiveLink(activeItem.link);
+  };
+
+  let isScheduled = false;
+  const scheduleUpdate = () => {
+    if (isScheduled) return;
+    isScheduled = true;
+    window.requestAnimationFrame(() => {
+      updateActiveLink();
+      isScheduled = false;
+    });
+  };
+
+  updateActiveLink();
+  window.addEventListener("scroll", scheduleUpdate, { passive: true });
+  window.addEventListener("resize", scheduleUpdate);
+});
+
 if (menuToggle && navigation) {
   const closeMenu = () => {
     menuToggle.setAttribute("aria-expanded", "false");
