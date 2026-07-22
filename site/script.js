@@ -10,6 +10,9 @@ const translations = Object.freeze({
   "about-mission": "成豐醫材有限公司成立於2016年，秉持明確的使命：將高品質且具價格競爭力的醫療器材引進台灣，讓患者在治療選擇上擁有更多元且實際的選項。",
   "home-about-title": "成立於2016年，秉持明確的使命。",
   "home-founder-experience": "在創立成豐醫材有限公司之前，我曾於台灣某醫療器材公司擔任業務總監超過十年。",
+  "home-contact-eyebrow": "聯絡資訊",
+  "home-contact-title": "我們持續尋找具創新技術與全新應用的醫療產品。",
+  "home-contact-button": "聯絡成豐醫材",
   "about-background-nav": "公司簡介",
   "company-profile-title": "公司簡介",
   "about-background-one": "在創立成豐醫材有限公司之前，我曾於台灣某醫療器材公司擔任業務總監超過十年。在此期間，我深入了解台灣醫療器材認證流程（QSD與查驗登記）、進口法規、通路運作，以及市場需求的演變。同時，我也觀察到市場中存在一個結構性的缺口：可供選擇的品牌有限，患者在技術、品質與價格方面往往缺乏足夠的替代方案。",
@@ -19,6 +22,8 @@ const translations = Object.freeze({
   "growth-history-two": "我們曾面臨各種嚴峻的考驗與挑戰，包括艱困的市場環境、法規變動，以及未必如預期發展的商業決策。在某些關鍵時刻，公司甚至需要正視自身是否能持續營運的重大課題。",
   "growth-history-three": "同時，我們也經歷了穩定成長的階段，並在台灣醫療器材領域達成多項重要里程碑。這些高低起伏的歷程，累積了豐富且貼近實務的案例與經驗，對我們的團隊與合作夥伴而言，皆具有高度的學習與參考價值。",
   "growth-history-four": "正是這些經歷，造就了今日的成豐醫材有限公司。一家具備風險意識、重視長期承諾，並願意投入時間與資源，在台灣市場建立永續品牌價值的公司。",
+  "milestones-nav": "里程碑",
+  "milestones-heading": "公司發展里程碑",
   "teamwork-title": "團隊合作",
   "teamwork-one": "我們從過去的發展中深刻體會到一件重要的事：企業的成長從來不可能僅靠個人完成。",
   "teamwork-two": "今日的成豐醫材有限公司，是由一群秉持共同信念的團隊所成就——我們相信，患者應該享有更優質醫療技術的可近性，而醫療院所與臨床醫師也應擁有一個專業且值得信賴的在地合作夥伴。",
@@ -56,6 +61,27 @@ languagePageLinks.forEach((link) => {
 
 let currentLanguage = window.location.hash.toLowerCase() === "#tw" ? "tw" : "en";
 
+const latinTextPattern = /[A-Za-z]/;
+const hanTextPattern = /[\u3400-\u9fff]/;
+const setInlineEnglishLanguage = () => {
+  document.querySelectorAll("p, h1, h2, h3, h4, li, a, button, dt, dd, small, strong, span").forEach((node) => {
+    if (node.children.length) return;
+
+    const copy = node.textContent.trim();
+    const shouldUseEnglishFont = currentLanguage === "tw"
+      && latinTextPattern.test(copy)
+      && !hanTextPattern.test(copy);
+
+    if (shouldUseEnglishFont) {
+      node.lang = "en";
+      node.dataset.autoLanguage = "en";
+    } else if (node.dataset.autoLanguage === "en") {
+      node.removeAttribute("lang");
+      delete node.dataset.autoLanguage;
+    }
+  });
+};
+
 const applyLanguage = (language, updateUrl = false) => {
   currentLanguage = language === "tw" ? "tw" : "en";
   document.documentElement.lang = currentLanguage === "tw" ? "zh-Hant" : "en";
@@ -67,6 +93,8 @@ const applyLanguage = (language, updateUrl = false) => {
       ? translatedCopy
       : node.dataset.i18nEnglish;
   });
+
+  setInlineEnglishLanguage();
 
   languagePageLinks.forEach((link) => {
     const baseHref = link.dataset.languageBaseHref;
@@ -88,6 +116,8 @@ const applyLanguage = (language, updateUrl = false) => {
       window.location.hash = currentLanguage === "tw" ? "tw" : "";
     }
   }
+
+  window.dispatchEvent(new Event("amm:languagechange"));
 };
 
 applyLanguage(currentLanguage);
@@ -134,6 +164,24 @@ document.querySelectorAll(".anchor-nav").forEach((anchorNav) => {
 
   if (!items.length) return;
 
+  const revealActiveLink = (activeLink) => {
+    if (anchorNav.scrollWidth <= anchorNav.clientWidth) return;
+
+    const navRect = anchorNav.getBoundingClientRect();
+    const linkRect = activeLink.getBoundingClientRect();
+    const safeInset = 16;
+    const isFullyVisible = linkRect.left >= navRect.left + safeInset
+      && linkRect.right <= navRect.right - safeInset;
+
+    if (isFullyVisible) return;
+
+    const nextScrollLeft = anchorNav.scrollLeft + linkRect.left - navRect.left - safeInset;
+    anchorNav.scrollTo({
+      left: Math.max(0, nextScrollLeft),
+      behavior: reduceMotion ? "auto" : "smooth",
+    });
+  };
+
   const setActiveLink = (activeLink) => {
     items.forEach(({ link }) => {
       const isActive = link === activeLink;
@@ -144,6 +192,7 @@ document.querySelectorAll(".anchor-nav").forEach((anchorNav) => {
         link.removeAttribute("aria-current");
       }
     });
+    revealActiveLink(activeLink);
   };
 
   const updateActiveLink = () => {
@@ -176,6 +225,7 @@ document.querySelectorAll(".anchor-nav").forEach((anchorNav) => {
   updateActiveLink();
   window.addEventListener("scroll", scheduleUpdate, { passive: true });
   window.addEventListener("resize", scheduleUpdate);
+  window.addEventListener("amm:languagechange", scheduleUpdate);
 });
 
 if (menuToggle && navigation) {
