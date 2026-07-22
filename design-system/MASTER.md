@@ -14,7 +14,7 @@
 - Regulatory content follows the supplied QSD and product-registration copy; diagrams may reorganize source text but must not introduce new legal claims.
 - Product photography is limited to images supplied by the client. Products without supplied photography use clearly labelled brand placeholders rather than simulated product images.
 - Product listings use responsive, auto-wrapping card grids so future products can be added without redesigning the page structure.
-- AI-generated people are used only as unnamed representative portraits; they must not be presented as identified real employees and should be replaceable with approved staff photography later.
+- Organization is presented as a text-based department structure without representative staff portraits.
 
 ## Brand palette
 
@@ -49,7 +49,7 @@ Purple is reserved for focus, key words, CTA surfaces, active states, and select
 
 ## Components
 
-- Sticky horizontal header using the supplied horizontal AMM logo and one emphasized contact CTA.
+- Sticky horizontal header using the supplied horizontal AMM logo, a Contact link matching the other navigation items, and a compact `en｜中文` language toggle.
 - Rounded-rectangle buttons with a minimum 48 px touch height.
 - Thin 1 px borders; low shadow usage.
 - Cards use structure and spacing before elevation.
