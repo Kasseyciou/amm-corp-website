@@ -524,7 +524,6 @@ html[lang="zh-Hant"] body :lang(en) {
 
 .emblem-note {
   position: absolute;
-  z-index: 4;
   padding: 8px 11px;
   border: 1px solid rgba(91,38,188,0.18);
   border-radius: 999px;
@@ -535,9 +534,53 @@ html[lang="zh-Hant"] body :lang(en) {
   letter-spacing: 0.13em;
 }
 
-.note-one { top: 15%; right: 8%; }
-.note-two { bottom: 14%; left: 2%; }
-.note-three { right: 0; bottom: 25%; }
+.emblem-satellites,
+.emblem-satellite {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.emblem-satellites {
+  z-index: 4;
+}
+
+.emblem-satellite {
+  display: block;
+  transform-origin: center;
+  will-change: transform;
+}
+
+.emblem-satellite .emblem-note {
+  top: 2%;
+  left: 50%;
+  white-space: nowrap;
+  will-change: transform;
+}
+
+.satellite-one {
+  animation: satellite-orbit-one 34s linear infinite;
+}
+
+.satellite-two {
+  animation: satellite-orbit-two 34s linear infinite;
+}
+
+.satellite-three {
+  animation: satellite-orbit-three 34s linear infinite;
+}
+
+.satellite-one .emblem-note {
+  animation: satellite-counter-one 34s linear infinite;
+}
+
+.satellite-two .emblem-note {
+  animation: satellite-counter-two 34s linear infinite;
+}
+
+.satellite-three .emblem-note {
+  animation: satellite-counter-three 34s linear infinite;
+}
 
 .scroll-cue {
   position: absolute;
@@ -3502,6 +3545,36 @@ html[lang="zh-Hant"] .compact-about-hero .about-hero-inner h1 {
   75% { border-radius: 57% 43% 41% 59% / 44% 58% 42% 56%; transform: rotate(-29deg) scale(1.02); }
 }
 
+@keyframes satellite-orbit-one {
+  from { transform: rotate(22deg); }
+  to { transform: rotate(382deg); }
+}
+
+@keyframes satellite-orbit-two {
+  from { transform: rotate(142deg); }
+  to { transform: rotate(502deg); }
+}
+
+@keyframes satellite-orbit-three {
+  from { transform: rotate(262deg); }
+  to { transform: rotate(622deg); }
+}
+
+@keyframes satellite-counter-one {
+  from { transform: translateX(-50%) rotate(-22deg); }
+  to { transform: translateX(-50%) rotate(-382deg); }
+}
+
+@keyframes satellite-counter-two {
+  from { transform: translateX(-50%) rotate(-142deg); }
+  to { transform: translateX(-50%) rotate(-502deg); }
+}
+
+@keyframes satellite-counter-three {
+  from { transform: translateX(-50%) rotate(-262deg); }
+  to { transform: translateX(-50%) rotate(-622deg); }
+}
+
 .home-product-grid,
 .product-catalog-grid {
   display: grid;
@@ -3858,7 +3931,9 @@ html[lang="zh-Hant"] .compact-about-hero .about-hero-inner h1 {
 @media (prefers-reduced-motion: reduce) {
   .home-hero-emblem .emblem-core,
   .home-hero-emblem .orbit-one,
-  .home-hero-emblem .orbit-two {
+  .home-hero-emblem .orbit-two,
+  .home-hero-emblem .emblem-satellite,
+  .home-hero-emblem .emblem-satellite .emblem-note {
     animation: none !important;
     will-change: auto;
   }
@@ -3866,4 +3941,10 @@ html[lang="zh-Hant"] .compact-about-hero .about-hero-inner h1 {
   .home-hero-emblem .emblem-core { transform: rotate(-6deg); }
   .home-hero-emblem .orbit-one { transform: rotate(16deg); }
   .home-hero-emblem .orbit-two { transform: rotate(-20deg); }
+  .home-hero-emblem .satellite-one { transform: rotate(22deg); }
+  .home-hero-emblem .satellite-two { transform: rotate(142deg); }
+  .home-hero-emblem .satellite-three { transform: rotate(262deg); }
+  .home-hero-emblem .satellite-one .emblem-note { transform: translateX(-50%) rotate(-22deg); }
+  .home-hero-emblem .satellite-two .emblem-note { transform: translateX(-50%) rotate(-142deg); }
+  .home-hero-emblem .satellite-three .emblem-note { transform: translateX(-50%) rotate(-262deg); }
 }
