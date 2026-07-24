@@ -2442,27 +2442,8 @@ html[lang="zh-Hant"] .compact-about-hero .about-hero-inner h1 {
   content: "";
 }
 
-.product-count {
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-end;
-  gap: 18px;
-}
-
-.product-count strong {
-  color: var(--brand);
-  font-size: clamp(5rem, 10vw, 10rem);
-  letter-spacing: -0.08em;
-  line-height: 0.72;
-}
-
-.product-count span {
-  margin-bottom: 2px;
-  color: var(--muted);
-  font-size: 0.75rem;
-  font-weight: 750;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
+.products-hero-grid {
+  grid-template-columns: 1fr;
 }
 
 .product-detail {
@@ -2705,8 +2686,6 @@ html[lang="zh-Hant"] .compact-about-hero .about-hero-inner h1 {
   .document-list { grid-template-columns: 1fr; }
   .regulatory-stage-reverse .stage-visual { order: 0; }
   .flow-connector { transform: rotate(90deg); }
-  .product-count { justify-content: flex-start; }
-  .product-count strong { font-size: 6.5rem; }
   .product-media,
   .product-type-visual { min-height: 410px; padding: 26px; }
   .product-media-strip { height: 80px; }
@@ -3132,7 +3111,7 @@ html[lang="zh-Hant"] .compact-about-hero .about-hero-inner h1 {
 .service-detail-grid {
   display: grid;
   align-items: center;
-  grid-template-columns: minmax(330px, 0.8fr) minmax(0, 1.2fr);
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
   gap: clamp(58px, 10vw, 150px);
 }
 
@@ -3143,6 +3122,8 @@ html[lang="zh-Hant"] .compact-about-hero .about-hero-inner h1 {
 .service-phase-visual {
   position: relative;
   display: flex;
+  inline-size: 100%;
+  min-inline-size: 0;
   align-items: center;
   justify-content: center;
   flex-direction: column;
