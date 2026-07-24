@@ -572,11 +572,13 @@ html[lang="zh-Hant"] body :lang(en) {
 }
 
 .section-index {
-  padding-top: 5px;
+  align-self: start;
+  padding-top: 0;
   color: var(--brand);
   font-size: 0.75rem;
   font-weight: 750;
   letter-spacing: 0.12em;
+  line-height: 1.2;
 }
 
 .intro-heading h2,
